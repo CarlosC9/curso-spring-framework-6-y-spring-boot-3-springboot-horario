@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -21,7 +20,11 @@ import java.util.Map;
 @Component
 public class CalendarInterceptor implements HandlerInterceptor {
 
-  private Logger logger = LoggerFactory.getLogger(CalendarInterceptor.class);
+  private Logger logger;
+
+  public CalendarInterceptor() {
+    this.logger = LoggerFactory.getLogger(CalendarInterceptor.class);
+  }
 
   @Value("${config.calendar.open}")
   private Integer open;
@@ -56,11 +59,7 @@ public class CalendarInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public boolean preHandle(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    Object handler
-  ) throws Exception {
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     Calendar calendar = Calendar.getInstance();
     int hour = calendar.get(Calendar.HOUR_OF_DAY);
     logger.info(Integer.toString(hour));
@@ -71,16 +70,5 @@ public class CalendarInterceptor implements HandlerInterceptor {
     }
     this.outTime(response);
     return false;
-
-  }
-
-  @Override
-  public void postHandle(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    Object handler,
-    ModelAndView modelAndView
-  ) throws Exception {
-
   }
 }
